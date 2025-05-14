@@ -56,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var _counter = 0.0;
   double myFontSize = 30.0;
+  late TextEditingController _controller;
 
   void _incrementCounter() {
     setState(() {
@@ -69,6 +70,18 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter = value;
       myFontSize = value;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
 
@@ -110,7 +123,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('You have pushed the button this many times:', style: TextStyle(fontSize: myFontSize)),
-            Image.asset("images/algonquin.jpg", width: 200, height: 200),
+            TextField(),
+            TextField(),
+            // Image.asset("images/algonquin.jpg", width: 200, height: 200),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium!
