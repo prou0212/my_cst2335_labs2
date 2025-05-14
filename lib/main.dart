@@ -42,6 +42,8 @@ class MyHomePage extends StatefulWidget {
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
 
+
+
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
@@ -53,23 +55,23 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-// class _MyHomePageState extends State<MyHomePage> {
-//   var _counter = 0.0;
-//   double myFontSize = 30.0;
-//
-//   void _incrementCounter() {
-//     setState(() {
-//       if(_counter < 99.0)
-//       _counter++;
-//     });
-//   }
-//
-//   void setNewValue(double value){
-//     setState(() {
-//       _counter = value;
-//       myFontSize = value;
-//     });
-//   }
+class _MyHomePageState extends State<MyHomePage> {
+  var _counter = 0.0;
+  double myFontSize = 30.0;
+
+  void _incrementCounter() {
+    setState(() {
+      if(_counter < 99.0)
+      _counter++;
+    });
+  }
+
+  void setNewValue(double value){
+    setState(() {
+      _counter = value;
+      myFontSize = value;
+    });
+  }
 
 
   @override
