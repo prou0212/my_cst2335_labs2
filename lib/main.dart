@@ -53,23 +53,23 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var _counter = 0.0;
-  double myFontSize = 30.0;
-
-  void _incrementCounter() {
-    setState(() {
-      if(_counter < 99.0)
-      _counter++;
-    });
-  }
-
-  void setNewValue(double value){
-    setState(() {
-      _counter = value;
-      myFontSize = value;
-    });
-  }
+// class _MyHomePageState extends State<MyHomePage> {
+//   var _counter = 0.0;
+//   double myFontSize = 30.0;
+//
+//   void _incrementCounter() {
+//     setState(() {
+//       if(_counter < 99.0)
+//       _counter++;
+//     });
+//   }
+//
+//   void setNewValue(double value){
+//     setState(() {
+//       _counter = value;
+//       myFontSize = value;
+//     });
+//   }
 
 
   @override
