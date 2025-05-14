@@ -54,23 +54,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _counter = 0.0;
-  double myFontSize = 30.0;
+
   late TextEditingController _controller;
-
-  void _incrementCounter() {
-    setState(() {
-      if(_counter < 99.0)
-      _counter++;
-    });
-  }
-
-  void setNewValue(double value){
-    setState(() {
-      _counter = value;
-      myFontSize = value;
-    });
-  }
 
   @override
   void initState() {
@@ -122,23 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('You have pushed the button this many times:', style: TextStyle(fontSize: myFontSize)),
             TextField(),
             TextField(),
             // Image.asset("images/algonquin.jpg", width: 200, height: 200),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium!
-              .copyWith(fontSize: myFontSize)),
-            Slider(value: _counter, max: 100.0, onChanged: setNewValue, min: 0.0)
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      ); // This trailing comma makes auto-formatting nicer for build methods.
+
   }
 }
