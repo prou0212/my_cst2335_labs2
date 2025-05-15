@@ -55,19 +55,37 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  late TextEditingController _controller;
+  TextEditingController _controllerLogin = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+  var sourceImage = "images/question.png";
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controllerLogin = TextEditingController();
+    _controllerPassword = TextEditingController();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controllerLogin.dispose();
+    _controllerPassword.dispose();
     super.dispose();
   }
+
+  void clicked() {
+    String password = _controllerPassword.text;
+
+      setState(() {
+        if (password == "QWERTY123") {
+          sourceImage = "images/sun.png";
+        }
+        else {
+          sourceImage = "images/stop-sign.png";
+        }
+      });
+
+    }
 
 
   @override
@@ -107,9 +125,21 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(),
-            TextField(),
-            // Image.asset("images/algonquin.jpg", width: 200, height: 200),
+            TextField(controller: _controllerLogin,
+              decoration: InputDecoration(
+                hintText: "Login",
+                border: OutlineInputBorder()
+            ),
+            ),
+            TextField(controller: _controllerPassword,
+                obscureText:true,
+            decoration: InputDecoration(
+                hintText: "Password",
+                border: OutlineInputBorder()
+            )
+            ),
+            ElevatedButton(onPressed: () { clicked();}, child: Text("Click Me")),
+            Image.asset(sourceImage),
           ],
         ),
       ),
