@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
 }
-//I'm Jesse
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -54,39 +54,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
 
-  TextEditingController _controllerLogin = TextEditingController();
-  TextEditingController _controllerPassword = TextEditingController();
-  var sourceImage = "images/question.png";
-
-  @override
-  void initState() {
-    super.initState();
-    _controllerLogin = TextEditingController();
-    _controllerPassword = TextEditingController();
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
   }
-
-  @override
-  void dispose() {
-    _controllerLogin.dispose();
-    _controllerPassword.dispose();
-    super.dispose();
-  }
-
-  void clicked() {
-    String password = _controllerPassword.text;
-
-      setState(() {
-        if (password == "QWERTY123") {
-          sourceImage = "images/sun.png";
-        }
-        else {
-          sourceImage = "images/stop-sign.png";
-        }
-      });
-
-    }
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,25 +104,20 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(controller: _controllerLogin,
-              decoration: InputDecoration(
-                hintText: "Login",
-                border: OutlineInputBorder()
+            const Text('Welcome to CST8284'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-            ),
-            TextField(controller: _controllerPassword,
-                obscureText:true,
-            decoration: InputDecoration(
-                hintText: "Password",
-                border: OutlineInputBorder()
-            )
-            ),
-            ElevatedButton(onPressed: () { clicked();}, child: Text("Click Me")),
-            Image.asset(sourceImage),
+            ElevatedButton(onPressed: () { }, child: Image.asset("images/algonquin.jpg"))
           ],
         ),
       ),
-      ); // This trailing comma makes auto-formatting nicer for build methods.
-
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
