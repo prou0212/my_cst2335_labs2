@@ -83,10 +83,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
               Text("By Meat:", style: TextStyle(fontSize: 30.0)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/algonquin.jpg", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/question.png", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/stop-sign.png", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/sun.png", height: 100, width: 100))
+            ElevatedButton(onPressed: () { }, child: Image.asset("images/beef.png", height: 100, width: 100)),
+            ElevatedButton(onPressed: () { }, child: Image.asset("images/chicken.png", height: 100, width: 100)),
+            ElevatedButton(onPressed: () { }, child: Image.asset("images/pork.png", height: 100, width: 100)),
+            ElevatedButton(onPressed: () { }, child: Image.asset("images/seafood.png", height: 100, width: 100))
         ],),
         ]),
         ])
