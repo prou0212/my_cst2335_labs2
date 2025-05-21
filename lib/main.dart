@@ -83,11 +83,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
               Text("By Meat:", style: TextStyle(fontSize: 30.0)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/beef.png", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/chicken.png", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/pork.png", height: 100, width: 100)),
-            ElevatedButton(onPressed: () { }, child: Image.asset("images/seafood.png", height: 100, width: 100))
+        CircleAvatar(backgroundImage: AssetImage('images/beef.png'), radius:75),
+          CircleAvatar(backgroundImage: AssetImage('images/chicken.png'), radius:75),
+          CircleAvatar(backgroundImage: AssetImage('images/pork.png'), radius:75),
+          CircleAvatar(backgroundImage: AssetImage('images/seafood.png'), radius:75),
         ],),
+              Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Text("By Course:", style: TextStyle(fontSize: 30.0)
+                )],),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                CircleAvatar(backgroundImage: AssetImage('images/main-dishes.png'), radius:75),
+                CircleAvatar(backgroundImage: AssetImage('images/salad.png'), radius:75),
+                CircleAvatar(backgroundImage: AssetImage('images/side-dishes.png'), radius:75),
+                CircleAvatar(backgroundImage: AssetImage('images/crock-pot.png'), radius:75),
+              ],)
         ]),
         ])
         ])
