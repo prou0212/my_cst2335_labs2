@@ -76,17 +76,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center (
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text("Browse Categories", style: TextStyle(fontSize: 30.0),),
+        child: Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Text("Browse Categories", style: TextStyle(fontSize: 30.0)),
+          Column( mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text("Not sure about exactly which recipe you're looking for? Do a search, dive into our popular categories", style: TextStyle(fontSize: 15)),
+            Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Text("By Meat:", style: TextStyle(fontSize: 30.0)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ElevatedButton(onPressed: () { }, child: Image.asset("images/algonquin.jpg", height: 100, width: 100)),
             ElevatedButton(onPressed: () { }, child: Image.asset("images/question.png", height: 100, width: 100)),
             ElevatedButton(onPressed: () { }, child: Image.asset("images/stop-sign.png", height: 100, width: 100)),
             ElevatedButton(onPressed: () { }, child: Image.asset("images/sun.png", height: 100, width: 100))
-    ],
-        ),
-     ] ),
-
+        ],),
+        ]),
+        ])
+        ])
       ));
   }
 }
