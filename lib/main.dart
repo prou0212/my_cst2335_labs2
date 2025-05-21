@@ -76,30 +76,60 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center (
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text("Browse Categories", style: TextStyle(fontSize: 30.0)),
-          Column( mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text("Not sure about exactly which recipe you're looking for? Do a search, dive into our popular categories", style: TextStyle(fontSize: 15)),
-            Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
-              Text("By Meat:", style: TextStyle(fontSize: 30.0)),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        CircleAvatar(backgroundImage: AssetImage('images/beef.png'), radius:75),
-          CircleAvatar(backgroundImage: AssetImage('images/chicken.png'), radius:75),
-          CircleAvatar(backgroundImage: AssetImage('images/pork.png'), radius:75),
-          CircleAvatar(backgroundImage: AssetImage('images/seafood.png'), radius:75),
+          Text("Not sure about exactly which recipe you're looking for? Do a search, dive into our popular categories", style: TextStyle(fontSize: 15)),
+              Text("By Meat", style: TextStyle(fontSize: 30.0)),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Stack(alignment: AlignmentDirectional.center,
+              children: [ CircleAvatar(backgroundImage: AssetImage('images/beef.png'), radius:75),
+                Text("Beef", style: TextStyle(fontSize: 20.0,color:Colors.white,),)
+              ]),
+          Stack(alignment: AlignmentDirectional.center,
+            children: [ CircleAvatar(backgroundImage: AssetImage('images/chicken.png'), radius:75),
+              Text("Chicken", style: TextStyle(fontSize: 20.0, color:Colors.white),)
+            ]),
+          Stack(alignment: AlignmentDirectional.center,
+              children: [ CircleAvatar(backgroundImage: AssetImage('images/pork.png'), radius:75),
+                Text("Pork", style: TextStyle(fontSize: 20.0, color:Colors.white),)
+              ]),
+          Stack(alignment: AlignmentDirectional.center,
+              children: [ CircleAvatar(backgroundImage: AssetImage('images/seafood.png'), radius:75),
+                Text("Seafood", style: TextStyle(fontSize: 20.0, color:Colors.white),)
+              ]),
         ],),
-              Column( crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text("By Course:", style: TextStyle(fontSize: 30.0)
+              Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text("By Course", style: TextStyle(fontSize: 30.0)
                 )],),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                CircleAvatar(backgroundImage: AssetImage('images/main-dishes.png'), radius:75),
-                CircleAvatar(backgroundImage: AssetImage('images/salad.png'), radius:75),
-                CircleAvatar(backgroundImage: AssetImage('images/side-dishes.png'), radius:75),
-                CircleAvatar(backgroundImage: AssetImage('images/crock-pot.png'), radius:75),
-              ],)
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                Stack(alignment: AlignmentDirectional.center,
+                    children: [ CircleAvatar(backgroundImage: AssetImage('images/main-dishes.png'), radius:75),
+                      Text("Main Dishes", style: TextStyle(fontSize: 20.0,color:Colors.white,),)
+                    ]),
+                Stack(alignment: AlignmentDirectional.center,
+                    children: [ CircleAvatar(backgroundImage: AssetImage('images/salads.png'), radius:75),
+                      Text("Salads", style: TextStyle(fontSize: 20.0,color:Colors.white,),)
+                    ]),
+                Stack(alignment: AlignmentDirectional.center,
+                    children: [ CircleAvatar(backgroundImage: AssetImage('images/side-dishes.png'), radius:75),
+                      Text("Side Dishes", style: TextStyle(fontSize: 20.0,color:Colors.white,),)
+                    ]),
+                Stack(alignment: AlignmentDirectional.center,
+                    children: [ CircleAvatar(backgroundImage: AssetImage('images/crock-pot.png'), radius:75),
+                      Text("Crock Pot", style: TextStyle(fontSize: 20.0,color:Colors.white,),)
+                    ]),
+              ],),
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text("By Dessert", style: TextStyle(fontSize: 30.0)
+            )],
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            CircleAvatar(backgroundImage: AssetImage('images/ice-cream.jpg'), radius:75),
+            CircleAvatar(backgroundImage: AssetImage('images/brownies.jpeg'), radius:75),
+            CircleAvatar(backgroundImage: AssetImage('images/pies.jpg'), radius:75),
+            CircleAvatar(backgroundImage: AssetImage('images/cookies.jpg'), radius:75),
+          ],),
         ]),
-        ])
-        ])
       ));
   }
 }

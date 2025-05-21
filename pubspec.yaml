@@ -67,6 +67,10 @@ flutter:
     - images/salad.png
     - images/seafood.png
     - images/side-dishes.png
+    - images/brownies.jpeg
+    - images/cookies.jpg
+    - images/ice-cream.jpg
+    - images/pies.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
