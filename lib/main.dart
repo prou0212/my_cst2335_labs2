@@ -1,4 +1,6 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,15 +57,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  String? enterLogin;
+  String? enterPassword;
   TextEditingController _controllerLogin = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
-  var sourceImage = "images/question.png";
+  EncryptedSharedPreferences? prefs;
 
-  @override
+  Future <void> saveData() async {
+    String enterLogin = _controllerLogin.text;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString("savedLogin", enterLogin);
+    print("Saved login: $enterLogin");
+  }
+
   void initState() {
     super.initState();
     _controllerLogin = TextEditingController();
     _controllerPassword = TextEditingController();
+    enterLogin = _controllerLogin.text;
+    // enterPassword
   }
 
   @override
@@ -72,21 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _controllerPassword.dispose();
     super.dispose();
   }
-
-  void clicked() {
-    String password = _controllerPassword.text;
-
-    setState(() {
-      if (password == "QWERTY123") {
-        sourceImage = "images/sun.png";
-      }
-      else {
-        sourceImage = "images/stop-sign.png";
-      }
-    });
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -132,17 +133,43 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             TextField(controller: _controllerPassword,
-                obscureText:true,
+                obscureText: true,
                 decoration: InputDecoration(
                     hintText: "Password",
                     border: OutlineInputBorder()
                 )
             ),
-            ElevatedButton(onPressed: () { clicked();}, child: Text("Click Me")),
-            Image.asset(sourceImage),
+            ElevatedButton(
+              onPressed: () {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Save Login & Password'),
+                    content: const Text('Would you like to save your login and password'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'CANCEL');
+                        },
+                        child: const Text('CANCEL'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, "SAVE");
+                          },
+                          child: const Text("Save"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: const Text("Click Me"),
+            ),
           ],
+
         ),
-      ),
+
+    ),
     ); // This trailing comma makes auto-formatting nicer for build methods.
 
   }
