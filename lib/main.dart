@@ -54,24 +54,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _counter = 0.0;
-  double myFontSize = 30.0;
-
-  void _incrementCounter() {
-    setState(() {
-      if(_counter < 99.0)
-      _counter++;
-    });
-  }
-
-  void setNewValue(double value){
-    setState(() {
-      _counter = value;
-      myFontSize = value;
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -94,36 +76,258 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('You have pushed the button this many times:', style: TextStyle(fontSize: myFontSize)),
-
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium!
-              .copyWith(fontSize: myFontSize)),
-            Slider(value: _counter, max: 100.0, onChanged: setNewValue, min: 0.0)
+              "Browse Categories",
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "Not sure about exactly which recipe you're looking for? Do a search, dive into our popular categories",
+              style: TextStyle(fontSize: 20.0),
+            ),
+            Text(
+              "By Meat",
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/beef.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Beef",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/chicken.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Chicken",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/pork.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Pork",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/seafood.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Seafood",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              "By Course",
+              style: TextStyle(
+                fontSize: 30.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/main-dishes.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Main Dishes",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/salad.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Salads",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/side-dishes.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Side Dishes",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/crock-pot.png'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Crock Pot",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              "By Dessert",
+              style: TextStyle(
+                fontSize: 30.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/ice-cream.jpg'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Ice Cream",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/brownies.jpeg'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Brownies",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/pies.jpg'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Pies",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('images/cookies.jpg'),
+                      radius: 75,
+                    ),
+                    Text(
+                      "Cookies",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
