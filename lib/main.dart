@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
 }
-
+//I'm Jesse
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -54,6 +54,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  TextEditingController _controllerLogin = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+  var sourceImage = "images/question.png";
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerLogin = TextEditingController();
+    _controllerPassword = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controllerLogin.dispose();
+    _controllerPassword.dispose();
+    super.dispose();
+  }
+
+  void clicked() {
+    String password = _controllerPassword.text;
+
+    setState(() {
+      if (password == "QWERTY123") {
+        sourceImage = "images/sun.png";
+      }
+      else {
+        sourceImage = "images/stop-sign.png";
+      }
+    });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -76,258 +110,40 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Browse Categories",
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Not sure about exactly which recipe you're looking for? Do a search, dive into our popular categories",
-              style: TextStyle(fontSize: 20.0),
-            ),
-            Text(
-              "By Meat",
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/beef.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Beef",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/chicken.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Chicken",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/pork.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Pork",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/seafood.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Seafood",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              "By Course",
-              style: TextStyle(
-                fontSize: 30.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(controller: _controllerLogin,
+              decoration: InputDecoration(
+                  hintText: "Login",
+                  border: OutlineInputBorder()
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/main-dishes.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Main Dishes",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/salad.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Salads",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/side-dishes.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Side Dishes",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/crock-pot.png'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Crock Pot",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            TextField(controller: _controllerPassword,
+                obscureText:true,
+                decoration: InputDecoration(
+                    hintText: "Password",
+                    border: OutlineInputBorder()
+                )
             ),
-            Text(
-              "By Dessert",
-              style: TextStyle(
-                fontSize: 30.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/ice-cream.jpg'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Ice Cream",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/brownies.jpeg'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Brownies",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/pies.jpg'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Pies",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('images/cookies.jpg'),
-                      radius: 75,
-                    ),
-                    Text(
-                      "Cookies",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ElevatedButton(onPressed: () { clicked();}, child: Text("Click Me")),
+            Image.asset(sourceImage),
           ],
         ),
       ),
-    );
+    ); // This trailing comma makes auto-formatting nicer for build methods.
+
   }
 }
