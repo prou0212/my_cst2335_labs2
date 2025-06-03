@@ -71,8 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await prefs.setString("savedLogin", enterLogin);
     await prefs.setString("savedPassword", enterPassword);
-    print("Saved login: $enterLogin");
-    print("Saved Password: $enterPassword");
 
     String? verifyLogin = prefs.getString("savedLogin");
     String? verifyPassword = prefs.getString("savedPassword");
@@ -88,14 +86,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> loadSavedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String? savedLogin = prefs.getString("savedLogin");
     String? savedPassword = prefs.getString("savedPassword");
 
-    if(savedLogin != null) {
-      _controllerLogin.text = savedLogin;
+    if (savedLogin != null) {
+      _controllerLogin.text = savedLogin;  // Login appears in the TextField
+      print("Loaded login: $savedLogin");
     }
-    if(savedPassword != null) {
-      _controllerPassword.text = savedPassword;
+
+    if (savedPassword != null) {
+      _controllerPassword.text = savedPassword;  // Password appears in the TextField
+      print("Loaded password: $savedPassword");
+    }
+
+    if (savedLogin != null && savedPassword != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login data loaded and filled in TextFields!")),
+        );
+      });
+      print("✅ Both login and password loaded into TextFields");
+    } else {
+      print("No saved data found");
     }
   }
 
