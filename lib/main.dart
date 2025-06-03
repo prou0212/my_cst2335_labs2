@@ -63,20 +63,47 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _controllerPassword = TextEditingController();
   EncryptedSharedPreferences? prefs;
 
+
   Future <void> saveData() async {
     String enterLogin = _controllerLogin.text;
+    String enterPassword = _controllerPassword.text;
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setString("savedLogin", enterLogin);
+    await prefs.setString("savedPassword", enterPassword);
     print("Saved login: $enterLogin");
+    print("Saved Password: $enterPassword");
+
+    String? verifyLogin = prefs.getString("savedLogin");
+    String? verifyPassword = prefs.getString("savedPassword");
+    if (verifyLogin != null && verifyPassword != null) {
+      print("✅ Successfully saved both login and password!");
+      print("Login: $verifyLogin");
+      print("Password $verifyPassword");
+    }
+    else {
+      print("Error: Unsuccessful save");
+    }
+  }
+
+  Future<void> loadSavedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedLogin = prefs.getString("savedLogin");
+    String? savedPassword = prefs.getString("savedPassword");
+
+    if(savedLogin != null) {
+      _controllerLogin.text = savedLogin;
+    }
+    if(savedPassword != null) {
+      _controllerPassword.text = savedPassword;
+    }
   }
 
   void initState() {
     super.initState();
     _controllerLogin = TextEditingController();
     _controllerPassword = TextEditingController();
-    enterLogin = _controllerLogin.text;
-    // enterPassword
+    loadSavedData();
   }
 
   @override
@@ -155,9 +182,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       TextButton(
                         onPressed: () {
+                          saveData();
                           Navigator.pop(context, "SAVE");
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login and Password successfully saved")));
                           },
-                          child: const Text("Save"),
+                          child: const Text("SAVE"),
                       ),
                     ],
                   ),
