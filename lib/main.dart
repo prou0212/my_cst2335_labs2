@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String? verifyLogin = prefs.getString("savedLogin");
     String? verifyPassword = prefs.getString("savedPassword");
     if (verifyLogin != null && verifyPassword != null) {
-      print("✅ Successfully saved both login and password!");
+      print("Successfully saved both login and password!");
       print("Login: $verifyLogin");
       print("Password $verifyPassword");
     }
@@ -106,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SnackBar(content: Text("Login data loaded and filled in TextFields!")),
         );
       });
-      print("✅ Both login and password loaded into TextFields");
+      print("Both login and password loaded into TextFields");
     } else {
       print("No saved data found");
     }
