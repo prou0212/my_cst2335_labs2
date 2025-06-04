@@ -1,6 +1,5 @@
-import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,20 +60,20 @@ class _MyHomePageState extends State<MyHomePage> {
   String? enterPassword;
   TextEditingController _controllerLogin = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
-  EncryptedSharedPreferences? prefs;
 
+  final EncryptedSharedPreferences prefs  = EncryptedSharedPreferences();
 
   Future <void> saveData() async {
     String enterLogin = _controllerLogin.text;
     String enterPassword = _controllerPassword.text;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+ //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setString("savedLogin", enterLogin);
     await prefs.setString("savedPassword", enterPassword);
 
-    String? verifyLogin = prefs.getString("savedLogin");
-    String? verifyPassword = prefs.getString("savedPassword");
-    if (verifyLogin != null && verifyPassword != null) {
+   String? verifyLogin = await prefs.getString("savedLogin");
+   String? verifyPassword = await prefs.getString("savedPassword");
+    if (verifyLogin.isNotEmpty && verifyPassword.isNotEmpty) {
       print("Successfully saved both login and password!");
       print("Login: $verifyLogin");
       print("Password $verifyPassword");
@@ -84,34 +83,45 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void onPressed() {
+    String password = _controllerPassword.text;
+  }
+
   Future<void> loadSavedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //EncryptedSharedPreferences prefs = await EncryptedSharedPreferences.getInstance();
 
-    String? savedLogin = prefs.getString("savedLogin");
-    String? savedPassword = prefs.getString("savedPassword");
+    String? savedLogin = await prefs.getString("savedLogin");
+    String? savedPassword = await prefs.getString("savedPassword");
 
-    if (savedLogin != null) {
-      _controllerLogin.text = savedLogin;  // Login appears in the TextField
-      print("Loaded login: $savedLogin");
-    }
+    if (savedLogin.isNotEmpty && savedPassword.isNotEmpty) {
+      setState(() {
+        _controllerLogin.text = savedLogin;
+        _controllerPassword.text = savedPassword;
+      });
+      //savedLogin = _controllerLogin.text;  // Login appears in the TextField
+      //print("Loaded login: $savedLogin");
 
-    if (savedPassword != null) {
-      _controllerPassword.text = savedPassword;  // Password appears in the TextField
-      print("Loaded password: $savedPassword");
-    }
-
-    if (savedLogin != null && savedPassword != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      //savedPassword = _controllerPassword.text;  // Password appears in the TextField
+      //print("Loaded password: $savedPassword");
+      //WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Login data loaded and filled in TextFields!")),
         );
-      });
+    //  }
+    //);
       print("Both login and password loaded into TextFields");
     } else {
       print("No saved data found");
     }
   }
 
+  Future<void> removeData() async {
+   // SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("savedLogin");
+    await prefs.remove("savedPassword");
+  }
+
+  @override
   void initState() {
     super.initState();
     _controllerLogin = TextEditingController();
@@ -188,15 +198,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     content: const Text('Would you like to save your login and password'),
                     actions: <Widget>[
                       TextButton(
-                        onPressed: () {
-                          Navigator.pop(context, 'CANCEL');
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await removeData();
                         },
                         child: const Text('CANCEL'),
                       ),
                       TextButton(
-                        onPressed: () {
-                          saveData();
-                          Navigator.pop(context, "SAVE");
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await saveData();
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login and Password successfully saved")));
                           },
