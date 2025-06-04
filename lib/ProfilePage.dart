@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
+
   @override
   State<ProfilePage> createState() => OtherProfilePage();
 }
 
 class OtherProfilePage extends State<ProfilePage> {
-
   String? firstName;
   String? lastName;
   int? phoneNumber;
@@ -16,6 +16,16 @@ class OtherProfilePage extends State<ProfilePage> {
   TextEditingController _controllerLastName = TextEditingController();
   TextEditingController _controllerPhone = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
+
+//   Future <void> _launchPhone async {
+//     final phoneNumber = _controllerPhone.text;
+//     if(phoneNumber.isEmpty) {
+//       Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+//       if(await canLaunchUrl(phoneUri)) {
+//         await launchUrl(phoneUri);
+//   }
+//   }
+// }
 
   void initState() {
     super.initState();
@@ -42,29 +52,49 @@ class OtherProfilePage extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(controller: _controllerFirstName,
+            TextField(
+              controller: _controllerFirstName,
               decoration: InputDecoration(
-                  hintText: "First Name",
-                  border: OutlineInputBorder()
+                hintText: "First Name",
+                border: OutlineInputBorder(),
               ),
             ),
-            TextField(controller: _controllerLastName,
+            TextField(
+              controller: _controllerLastName,
               decoration: InputDecoration(
-                  hintText: "Last Name",
-                  border: OutlineInputBorder()
+                hintText: "Last Name",
+                border: OutlineInputBorder(),
               ),
             ),
-            TextField(controller: _controllerPhone,
-              decoration: InputDecoration(
-                  hintText: "Phone",
-                  border: OutlineInputBorder()
-              ),
-            ),
-            TextField(controller: _controllerEmail,
-                decoration: InputDecoration(
-                  hintText: "Email",
-                    border: OutlineInputBorder()
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controllerPhone,
+                    decoration: InputDecoration(
+                      hintText: "Phone",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ),
+                SizedBox(width: 8), // Space between TextField and buttons
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Icon(Icons.phone),
+                ),
+                SizedBox(width: 8), // Space between buttons
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Icon(Icons.sms),
+                ),
+              ],
+            ),
+            TextField(
+              controller: _controllerEmail,
+              decoration: InputDecoration(
+                hintText: "Email",
+                border: OutlineInputBorder(),
+              ),
             ),
           ],
         ),

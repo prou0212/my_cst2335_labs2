@@ -165,16 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-              child: Text("Go to Profile Picture"),
-            ),
+          children: <Widget> [
             TextField(
               controller: _controllerLogin,
               decoration: InputDecoration(
@@ -227,6 +218,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: const Text("Click Me"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Text("Go to Profile Page"),
             ),
           ],
         ),
