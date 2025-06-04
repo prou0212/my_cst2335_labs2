@@ -1,10 +1,12 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'ProfilePage.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
 //I'm Jesse
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -57,15 +59,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String? enterLogin;
   String? enterPassword;
   TextEditingController _controllerLogin = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   EncryptedSharedPreferences? prefs;
 
-
-  Future <void> saveData() async {
+  Future<void> saveData() async {
     String enterLogin = _controllerLogin.text;
     String enterPassword = _controllerPassword.text;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -79,8 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Successfully saved both login and password!");
       print("Login: $verifyLogin");
       print("Password $verifyPassword");
-    }
-    else {
+    } else {
       print("Error: Unsuccessful save");
     }
   }
@@ -92,19 +91,22 @@ class _MyHomePageState extends State<MyHomePage> {
     String? savedPassword = prefs.getString("savedPassword");
 
     if (savedLogin != null) {
-      _controllerLogin.text = savedLogin;  // Login appears in the TextField
+      _controllerLogin.text = savedLogin; // Login appears in the TextField
       print("Loaded login: $savedLogin");
     }
 
     if (savedPassword != null) {
-      _controllerPassword.text = savedPassword;  // Password appears in the TextField
+      _controllerPassword.text =
+          savedPassword; // Password appears in the TextField
       print("Loaded password: $savedPassword");
     }
 
     if (savedLogin != null && savedPassword != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login data loaded and filled in TextFields!")),
+          SnackBar(
+            content: Text("Login data loaded and filled in TextFields!"),
+          ),
         );
       });
       print("Both login and password loaded into TextFields");
@@ -140,10 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -167,54 +166,71 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(controller: _controllerLogin,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Text("Go to Profile Picture"),
+            ),
+            TextField(
+              controller: _controllerLogin,
               decoration: InputDecoration(
-                  hintText: "Login",
-                  border: OutlineInputBorder()
+                hintText: "Login",
+                border: OutlineInputBorder(),
               ),
             ),
-            TextField(controller: _controllerPassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                    hintText: "Password",
-                    border: OutlineInputBorder()
-                )
+            TextField(
+              controller: _controllerPassword,
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: "Password",
+                border: OutlineInputBorder(),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
                 showDialog<String>(
                   context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Save Login & Password'),
-                    content: const Text('Would you like to save your login and password'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context, 'CANCEL');
-                        },
-                        child: const Text('CANCEL'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          saveData();
-                          Navigator.pop(context, "SAVE");
+                  builder:
+                      (BuildContext context) => AlertDialog(
+                        title: const Text('Save Login & Password'),
+                        content: const Text(
+                          'Would you like to save your login and password',
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'CANCEL');
+                            },
+                            child: const Text('CANCEL'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              saveData();
+                              Navigator.pop(context, "SAVE");
 
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login and Password successfully saved")));
-                          },
-                          child: const Text("SAVE"),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Login and Password successfully saved",
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("SAVE"),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
                 );
               },
               child: const Text("Click Me"),
             ),
           ],
-
         ),
-
-    ),
+      ),
     ); // This trailing comma makes auto-formatting nicer for build methods.
-
   }
 }
