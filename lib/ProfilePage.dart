@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cst2335_labs/DataRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -54,6 +55,24 @@ class OtherProfilePage extends State<ProfilePage> {
 
   void initState() {
     super.initState();
+    _controllerFirstName = TextEditingController(
+      text: DataRepository.firstName,
+    );
+    _controllerLastName = TextEditingController(text: DataRepository.lastName);
+    _controllerEmail = TextEditingController(text: DataRepository.email);
+    _controllerPhone = TextEditingController(text: DataRepository.phone);
+
+    DataRepository.firstName = _controllerFirstName.text;
+    DataRepository.saveData();
+
+    DataRepository.lastName = _controllerLastName.text;
+    DataRepository.saveData();
+
+    DataRepository.phone = _controllerPhone.text;
+    DataRepository.saveData();
+
+    DataRepository.email = _controllerEmail.text;
+    DataRepository.saveData();
   }
 
   @override
@@ -73,9 +92,7 @@ class OtherProfilePage extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //Joking purposes
-            Text("Give me your Personal Information"),
-            Text("This is NOT a Scam"),
+            Text("Welcome back ${DataRepository.login}"),
             TextField(
               controller: _controllerFirstName,
               decoration: InputDecoration(
@@ -102,7 +119,10 @@ class OtherProfilePage extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(width: 8), // Space between TextField and buttons
-                ElevatedButton(onPressed: _phoneLauncher, child: Icon(Icons.phone)),
+                ElevatedButton(
+                  onPressed: _phoneLauncher,
+                  child: Icon(Icons.phone),
+                ),
                 SizedBox(width: 8), // Space between buttons
                 ElevatedButton(onPressed: _smsLauncher, child: Icon(Icons.sms)),
               ],
@@ -119,7 +139,10 @@ class OtherProfilePage extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                ElevatedButton(onPressed: _emailLauncher, child: Icon(Icons.email)),
+                ElevatedButton(
+                  onPressed: _emailLauncher,
+                  child: Icon(Icons.email),
+                ),
               ],
             ),
           ],
