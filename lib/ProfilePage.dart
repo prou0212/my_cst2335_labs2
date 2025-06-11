@@ -18,15 +18,24 @@ class OtherProfilePage extends State<ProfilePage> {
   TextEditingController _controllerPhone = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
 
-  //final UserRepository _repository = UserRepository();
-
   Future<void> _phoneLauncher() async {
     final Uri phoneUri = Uri(scheme: 'tel', path: _controllerPhone.text);
     if (await canLaunchUrl(phoneUri)) {
       await launchUrl(phoneUri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cannot make phone calls from this device")),
+      showDialog<String>(
+        context: context,
+        builder:
+            (BuildContext context) => AlertDialog(
+              title: const Text('Unsupported Feature'),
+              content: Text('Cannot make phone calls on this device'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('CANCEL'),
+                ),
+              ],
+            ),
       );
     }
   }
@@ -36,8 +45,19 @@ class OtherProfilePage extends State<ProfilePage> {
     if (await canLaunchUrl(smsUri)) {
       await launchUrl(smsUri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cannot make sms from this device")),
+      showDialog<String>(
+        context: context,
+        builder:
+            (BuildContext context) => AlertDialog(
+          title: const Text('Unsupported Feature'),
+          content: Text('Cannot use sms on this device'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('CANCEL'),
+            ),
+          ],
+        ),
       );
     }
   }
@@ -47,9 +67,20 @@ class OtherProfilePage extends State<ProfilePage> {
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Cannot email on this device")));
+      showDialog<String>(
+        context: context,
+        builder:
+            (BuildContext context) => AlertDialog(
+          title: const Text('Unsupported Feature'),
+          content: Text('Cannot use email on this device'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('CANCEL'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -142,6 +173,23 @@ class OtherProfilePage extends State<ProfilePage> {
                 ElevatedButton(
                   onPressed: _emailLauncher,
                   child: Icon(Icons.email),
+                ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await DataRepository.saveData();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Data has been saved to EncryptedSharedPreferences",
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("CLICK TO SAVE"),
+                    ),
+                  ],
                 ),
               ],
             ),
