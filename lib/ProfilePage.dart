@@ -6,13 +6,18 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => OtherProfilePage();
 }
 
+String? firstName;
+String? lastName;
+String? email;
+String? phone;
+
 class OtherProfilePage extends State<ProfilePage> {
   TextEditingController _controllerFirstName = TextEditingController();
   TextEditingController _controllerLastName = TextEditingController();
   TextEditingController _controllerPhone = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
 
-  // final UserRepository _repository = UserRepository();
+  //final UserRepository _repository = UserRepository();
 
   Future<void> _phoneLauncher() async {
     final Uri phoneUri = Uri(scheme: 'tel', path: _controllerPhone.text);

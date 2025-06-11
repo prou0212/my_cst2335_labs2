@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:my_cst2335_labs/DataRepository.dart';
 import 'package:my_cst2335_labs/ProfilePage.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-//I'm Jesse
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,6 +107,23 @@ class _MyHomePageState extends State<MyHomePage> {
     _controllerLogin = TextEditingController();
     _controllerPassword = TextEditingController();
     loadSavedData();
+
+    DataRepository.loadData().then((_) {
+    setState(() {
+      _controllerLogin.text = DataRepository.login;
+      _controllerPassword.text = DataRepository.password;
+    });
+  });
+
+    _controllerLogin.addListener(() {
+      DataRepository.login = _controllerLogin.text;
+      DataRepository.saveData();
+    });
+
+    _controllerPassword.addListener(() {
+      DataRepository.password = _controllerPassword.text;
+      DataRepository.saveData();
+    });
   }
 
   @override
@@ -181,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.pop(context);
                               await loginUser();
                             },
-                            child: const Text("Login"),
+                            child: const Text("LOGIN"),
                           ),
                         ],
                       ),
