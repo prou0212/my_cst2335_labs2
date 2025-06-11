@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_cst2335_labs/DataRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -12,12 +13,46 @@ String? lastName;
 String? email;
 String? phone;
 
-class OtherProfilePage extends State<ProfilePage> {
-  TextEditingController _controllerFirstName = TextEditingController();
-  TextEditingController _controllerLastName = TextEditingController();
-  TextEditingController _controllerPhone = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
+final EncryptedSharedPreferences prefs = EncryptedSharedPreferences();
 
+class OtherProfilePage extends State<ProfilePage> {
+  late TextEditingController _controllerFirstName;
+  late TextEditingController _controllerLastName;
+  late TextEditingController _controllerPhone;
+  late TextEditingController _controllerEmail;
+
+  Future<void> save() async {
+    String enterFirstName = _controllerFirstName.text;
+    String enterLastName = _controllerLastName.text;
+    String enterPhone = _controllerPhone.text;
+    String enterEmail = _controllerEmail.text;
+
+    await prefs.setString("savedFirstName", enterFirstName);
+    await prefs.setString("savedLastName", enterLastName);
+    await prefs.setString("savedPhone", enterPhone);
+    await prefs.setString("savedEmail", enterEmail);
+
+  }
+
+  Future<void> load() async {
+    String? first = await prefs.getString("savedFirstName");
+    String? last = await prefs.getString("savedLastName");
+    String? phone = await prefs.getString("savedPhone");
+    String? email = await prefs.getString("savedEmail");
+
+    setState(() {
+      _controllerFirstName.text = first ?? '';
+      _controllerLastName.text = last ?? '';
+      _controllerPhone.text = phone ?? '';
+      _controllerEmail.text = email ?? '';
+    });
+
+    print("Success");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Data loaded from EncryptedSharedPreferences")),
+    );
+  }
+  ///TODO: FINISHED - LAUNCHES/ASKS FOR THE PHONE APPLICATION
   Future<void> _phoneLauncher() async {
     final Uri phoneUri = Uri(scheme: 'tel', path: _controllerPhone.text);
     if (await canLaunchUrl(phoneUri)) {
@@ -40,6 +75,7 @@ class OtherProfilePage extends State<ProfilePage> {
     }
   }
 
+  ///
   Future<void> _smsLauncher() async {
     final Uri smsUri = Uri(scheme: 'sms', path: _controllerPhone.text);
     if (await canLaunchUrl(smsUri)) {
@@ -84,26 +120,15 @@ class OtherProfilePage extends State<ProfilePage> {
     }
   }
 
-  void initState() {
-    super.initState();
-    _controllerFirstName = TextEditingController(
-      text: DataRepository.firstName,
-    );
-    _controllerLastName = TextEditingController(text: DataRepository.lastName);
-    _controllerEmail = TextEditingController(text: DataRepository.email);
-    _controllerPhone = TextEditingController(text: DataRepository.phone);
 
-    DataRepository.firstName = _controllerFirstName.text;
-    DataRepository.saveData();
-
-    DataRepository.lastName = _controllerLastName.text;
-    DataRepository.saveData();
-
-    DataRepository.phone = _controllerPhone.text;
-    DataRepository.saveData();
-
-    DataRepository.email = _controllerEmail.text;
-    DataRepository.saveData();
+@override
+void initState() {
+  super.initState();
+  _controllerFirstName = TextEditingController();
+  _controllerLastName = TextEditingController();
+  _controllerPhone = TextEditingController();
+  _controllerEmail = TextEditingController();
+  load();
   }
 
   @override
@@ -123,7 +148,7 @@ class OtherProfilePage extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Welcome back ${DataRepository.login}"),
+            Text("Welcome back ${DataRepository.login.toString()}"),
             TextField(
               controller: _controllerFirstName,
               decoration: InputDecoration(
@@ -178,7 +203,7 @@ class OtherProfilePage extends State<ProfilePage> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        await DataRepository.saveData();
+                        await save();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
