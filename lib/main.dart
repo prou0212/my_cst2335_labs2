@@ -96,26 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     await prefs.remove("savedPassword");
   }
 
-  Future<void> loginUser() async {
-    // String enterLogin = _controllerLogin.text;
-    // String enterPassword = _controllerPassword.text;
-    //
-    // if (enterLogin.isNotEmpty && enterPassword.isNotEmpty) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => ProfilePage()),
-    //   );
-    //
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text("Welcome Back"), duration: Duration(seconds: 3)),
-    //   );
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text("Please enter a login and password")),
-    //   );
-    // }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -189,6 +169,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () async {
                               Navigator.pop(context);
                               await removeData();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProfilePage()),
+                              );
                             },
                             child: const Text('CANCEL'),
                           ),
@@ -207,13 +191,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             child: const Text("SAVE"),
                           ),
-                          // TextButton(
-                          //   onPressed: () async {
-                          //     Navigator.pop(context);
-                          //     await loginUser();
-                          //   },
-                          //   child: const Text("LOGIN"),
-                          // ),
                         ],
                       ),
                 );
