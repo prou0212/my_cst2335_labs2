@@ -21,11 +21,11 @@ class DataRepository {
 
   // If the value is null, use the empty string
   static Future<void> loadData() async {
-    login = await _prefs.getString(login) ?? "";
-    password = await _prefs.getString(password) ?? "";
-    firstName = await _prefs.getString(firstName) ?? "";
-    lastName = await _prefs.getString(lastName) ?? "";
-    phone = await _prefs.getString(phone) ?? "";
-    email = await _prefs.getString(email) ?? "";
+    login = await _prefs.getString(login);
+    password = await _prefs.getString(password);
+    firstName = await _prefs.getString(firstName);
+    lastName = await _prefs.getString(lastName);
+    phone = await _prefs.getString(phone);
+    email = await _prefs.getString(email);
   }
 }

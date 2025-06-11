@@ -55,6 +55,21 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       print("Error: Unsuccessful save");
     }
+
+    if (enterLogin.isNotEmpty && enterPassword.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Welcome Back"), duration: Duration(seconds: 3)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter a login and password")),
+      );
+    }
   }
 
   Future<void> loadSavedData() async {
@@ -82,23 +97,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loginUser() async {
-    String enterLogin = _controllerLogin.text;
-    String enterPassword = _controllerPassword.text;
-
-    if (enterLogin.isNotEmpty && enterPassword.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome Back"), duration: Duration(seconds: 3)),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please enter a login and password")),
-      );
-    }
+    // String enterLogin = _controllerLogin.text;
+    // String enterPassword = _controllerPassword.text;
+    //
+    // if (enterLogin.isNotEmpty && enterPassword.isNotEmpty) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => ProfilePage()),
+    //   );
+    //
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text("Welcome Back"), duration: Duration(seconds: 3)),
+    //   );
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text("Please enter a login and password")),
+    //   );
+    // }
   }
 
   @override
@@ -192,13 +207,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             child: const Text("SAVE"),
                           ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              await loginUser();
-                            },
-                            child: const Text("LOGIN"),
-                          ),
+                          // TextButton(
+                          //   onPressed: () async {
+                          //     Navigator.pop(context);
+                          //     await loginUser();
+                          //   },
+                          //   child: const Text("LOGIN"),
+                          // ),
                         ],
                       ),
                 );
