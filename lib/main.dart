@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
-import 'package:my_cst2335_labs/DataRepository.dart';
-import 'package:my_cst2335_labs/ProfilePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Lab 6'),
     );
   }
 }
@@ -32,99 +30,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? enterLogin;
-  String? enterPassword;
-  TextEditingController _controllerLogin = TextEditingController();
-  TextEditingController _controllerPassword = TextEditingController();
-
-  final EncryptedSharedPreferences prefs = EncryptedSharedPreferences();
-
-  Future<void> saveData() async {
-    String enterLogin = _controllerLogin.text;
-    String enterPassword = _controllerPassword.text;
-
-    await prefs.setString("savedLogin", enterLogin);
-    await prefs.setString("savedPassword", enterPassword);
-
-    String? verifyLogin = await prefs.getString("savedLogin");
-    String? verifyPassword = await prefs.getString("savedPassword");
-    if (verifyLogin.isNotEmpty && verifyPassword.isNotEmpty) {
-      print("Successfully saved both login and password!");
-      print("Login: $verifyLogin");
-      print("Password $verifyPassword");
-    } else {
-      print("Error: Unsuccessful save");
-    }
-
-    if (enterLogin.isNotEmpty && enterPassword.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome Back"), duration: Duration(seconds: 3)),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please enter a login and password")),
-      );
-    }
-  }
-
-  Future<void> loadSavedData() async {
-    String? savedLogin = await prefs.getString("savedLogin");
-    String? savedPassword = await prefs.getString("savedPassword");
-
-    if (savedLogin.isNotEmpty && savedPassword.isNotEmpty) {
-      setState(() {
-        _controllerLogin.text = savedLogin;
-        _controllerPassword.text = savedPassword;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login data loaded and filled in TextFields!")),
-      );
-      print("Both login and password loaded into TextFields");
-    } else {
-      print("No saved data found");
-    }
-  }
-
-  Future<void> removeData() async {
-    await prefs.remove("savedLogin");
-    await prefs.remove("savedPassword");
-  }
+  String? enterItem;
+  String? enterQuantity;
+  TextEditingController _controllerItem = TextEditingController();
+  TextEditingController _controllerQuantity = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _controllerLogin = TextEditingController();
-    _controllerPassword = TextEditingController();
-    loadSavedData();
-
-    DataRepository.loadData().then((_) {
-    setState(() {
-      _controllerLogin.text = DataRepository.login;
-      _controllerPassword.text = DataRepository.password;
-    });
-  });
-
-    _controllerLogin.addListener(() {
-      DataRepository.login = _controllerLogin.text;
-      DataRepository.saveData();
-    });
-
-    _controllerPassword.addListener(() {
-      DataRepository.password = _controllerPassword.text;
-      DataRepository.saveData();
-    });
+    _controllerItem = TextEditingController();
+    _controllerQuantity = TextEditingController();
   }
 
   @override
   void dispose() {
-    _controllerLogin.dispose();
-    _controllerPassword.dispose();
+    _controllerItem.dispose();
+    _controllerQuantity.dispose();
     super.dispose();
   }
 
@@ -139,67 +60,155 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-              controller: _controllerLogin,
-              decoration: InputDecoration(
-                hintText: "Login",
-                border: OutlineInputBorder(),
-              ),
+            Text(
+              "Please enter the fields below",
+              style: TextStyle(fontSize: 20),
             ),
-            TextField(
-              controller: _controllerPassword,
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: "Password",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                showDialog<String>(
-                  context: context,
-                  builder:
-                      (BuildContext context) => AlertDialog(
-                        title: const Text('Save Login & Password'),
-                        content: const Text(
-                          'Would you like to save your login and password',
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              await removeData();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ProfilePage()),
-                              );
-                            },
-                            child: const Text('CANCEL'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              await saveData();
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _controllerItem,
+                    decoration: InputDecoration(
+                      hintText: "Type the item here",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _controllerQuantity,
+                    decoration: InputDecoration(
+                      hintText: "Type the quantity here",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Login and Password successfully saved",
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text("SAVE"),
+                ElevatedButton(
+                  onPressed: () async {
+                    showDialog<String>(
+                      context: context,
+                      builder:
+                          (BuildContext context) => AlertDialog(
+                            title: const Text("Add Items?"),
+                            content: const Text(
+                              "Do you want to add any items items from the list?",
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  //TODO: Selecting "Yes" from the AlertDialog removes the item from the list.
+                                  setState(() {});
+                                  _controllerItem.clear();
+                                  _controllerQuantity.clear();
+                                },
+                                child: const Text('NO'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  String newItem =
+                                      "${_controllerItem.text} quantity: ${_controllerQuantity.text}";
+                                  setState(() {
+                                    words.add(newItem);
+                                  });
+                                  _controllerItem.clear();
+                                  _controllerQuantity.clear();
+                                },
+                                child: const Text("YES"),
+                                //TODO: Selecting "No" from the AlertDialog does not remove the item from the list.
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                );
-              },
-              child: const Text("Click Me"),
+                    );
+                  },
+                  child: const Text("Click Me"),
+                ),
+              ],
             ),
+            Expanded(child: listPage()),
           ],
         ),
       ),
     ); // This trailing comma makes auto-formatting nicer for build methods.
+  }
+
+  List<String> words = [];
+
+  Widget listPage() {
+    return Column(
+      children: [
+        if (words.isEmpty)
+          Text("No Items in the List", style: TextStyle(fontSize: 12))
+        else
+          Expanded(
+            child: ListView.builder(
+              itemCount: words.length,
+              itemBuilder: (context, rowNum) {
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text("Details about Item"),
+                            content: Text("You clicked on ${words[rowNum]}"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  onLongPress: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text("Delete Item"),
+                            content: Text(
+                              "Would you like to delete then item you selected?",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  //TODO: Selecting "Yes" from the AlertDialog removes the item from the list.
+                                  setState(() {});
+                                  words.removeAt(rowNum);
+                                },
+                                child: const Text('YES'),
+                              ),
+
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("NO"),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${rowNum + 1}: "),
+                      Expanded(child: Text(words[rowNum])),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
   }
 }
