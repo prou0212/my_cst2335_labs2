@@ -12,8 +12,8 @@ class ToDoItem {
   static int ID = 1;
 
   ToDoItem(this.id, this.name, this.quantity) {
-    
-    if(id > ID) {
+
+    if(id >= ID) {
       ID = id + 1;
     }
 

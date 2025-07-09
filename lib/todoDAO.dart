@@ -3,7 +3,7 @@ import 'ToDoItem.dart';
 import 'dart:async';
 
 @dao
-abstract class todoDAO {
+abstract class TodoDAO {
   @Query('SELECT * FROM ToDoItem')
   Future<List<ToDoItem>> findAllItems();
 
