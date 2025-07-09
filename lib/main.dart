@@ -176,7 +176,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             content: Text(
                               "Would you like to delete then item you selected?",
                             ),
-
                             actions: [
                               TextButton(
                                 onPressed: () async {
