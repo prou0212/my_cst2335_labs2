@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:my_cst2335_labs/ToDoItem.dart';
 import 'package:my_cst2335_labs/database.dart';
+import 'package:my_cst2335_labs/todoDAO.dart';
 
-void main() {
+import 'ToDoItem.dart';
+
+void main() async {
+  // TestWidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Lab 6'),
+      home: const MyHomePage(title: 'Lab 7'),
     );
   }
 }
@@ -38,31 +42,64 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _controllerQuantity = TextEditingController();
 
   late AppDatabase database;
+  late TodoDAO _dao;
   List<ToDoItem> items = [];
+  bool isLoading = true;
 
   Future<void> _initDatabase() async {
-    database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    try {
+      database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      _dao = database.todoDao;
+      // await _dao.add(
+      //   ToDoItem(0, 'Apple', '10'),
+      // );
+      // await _dao.add(
+      //   ToDoItem(1, 'Orange', '20'),
+      // );
+      // await _loadItems();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Database initialization error: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
     _loadItems();
   }
 
   Future<void> _loadItems() async {
-    final loadedItems = await database.todoDao.findAllItems();
-    setState(() {
-      items = loadedItems;
-    });
+    try {
+      final loadedItems = await database.todoDao.findAllItems();
+
+      setState(() {
+        items = loadedItems;
+      });
+    } catch (e) {
+      print('Error loading items: $e');
+    }
   }
 
   Future<void> _addItems(String name, String quantity) async {
-    final newID = DateTime.now().millisecondsSinceEpoch;
-    final newItem = ToDoItem(newID, name, quantity);
+    try {
+      final newID = DateTime.now().millisecondsSinceEpoch;
+      final newItem = ToDoItem(newID, name, quantity);
 
-    await database.todoDao.add(newItem);
-    _loadItems();
+      await database.todoDao.add(newItem);
+      await _loadItems();
+    } catch (e) {
+      print('Error adding item: $e');
+    }
   }
 
   Future<void> _deleteItems(int id) async {
-    await database.todoDao.delete(id);
-    _loadItems();
+    try {
+      await database.todoDao.delete(id);
+      await _loadItems();
+    } catch (e) {
+      print('Error deleting item: $e');
+    }
   }
 
   @override
@@ -70,7 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _controllerItem = TextEditingController();
     _controllerQuantity = TextEditingController();
-    _initDatabase();
+    Future.delayed(Duration.zero, () async {
+      await _initDatabase();
+    });
   }
 
   @override
@@ -121,12 +160,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 ElevatedButton(
                   onPressed: () async {
-                    if(_controllerItem.text.isNotEmpty && _controllerQuantity.text.isNotEmpty) {
+                    if (_controllerItem.text.isNotEmpty &&
+                        _controllerQuantity.text.isNotEmpty) {
                       showDialog<String>(
                         context: context,
                         builder:
-                            (BuildContext context) =>
-                            AlertDialog(
+                            (BuildContext context) => AlertDialog(
                               title: const Text("Add Items?"),
                               content: const Text(
                                 "Do you want to add any items items from the list?",
@@ -143,8 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 TextButton(
                                   onPressed: () async {
                                     Navigator.pop(context);
-                                    await _addItems(_controllerItem.text,
-                                        _controllerQuantity.text);
+                                    await _addItems(
+                                      _controllerItem.text,
+                                      _controllerQuantity.text,
+                                    );
+
                                     _controllerItem.clear();
                                     _controllerQuantity.clear();
                                   },
@@ -170,9 +212,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget listPage() {
     return Column(
       children: [
-        if (items.isEmpty)
-          Text("No Items in the List", style: TextStyle(fontSize: 12))
-        else
           Expanded(
             child: ListView.builder(
               itemCount: items.length,
@@ -185,7 +224,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder:
                           (context) => AlertDialog(
                             title: Text("Details about Item"),
-                            content: Text("Item: {$items.name}\nQuantity: ${item.quantity}"),
+                            content: Text(
+                              "Item: {$items.name}\nQuantity: ${item.quantity}",
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
@@ -227,7 +268,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("${rowNum + 1}: "),
-                      Expanded(child: Text("${item.name} (Qty: ${item.quantity})")),
+                      Expanded(
+                        child: Text("${item.name} (Qty: ${item.quantity})"),
+                      ),
                     ],
                   ),
                 );

@@ -18,4 +18,9 @@ class ToDoItem {
     }
 
   }
+
+  @override
+  String toString() {
+    return '${id} - ${name} - ${quantity}';
+  }
 }
