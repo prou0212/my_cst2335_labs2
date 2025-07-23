@@ -1,51 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:my_cst2335_labs/ToDoItem.dart';
+import 'package:my_cst2335_labs/database.dart';
+import 'package:my_cst2335_labs/todoDAO.dart';
 
-void main() {
+import 'ToDoItem.dart';
+
+void main() async {
+  // TestWidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Lab 7'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -54,76 +36,242 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _counter = 0.0;
-  double myFontSize = 30.0;
+  String? enterItem;
+  String? enterQuantity;
+  TextEditingController _controllerItem = TextEditingController();
+  TextEditingController _controllerQuantity = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      if(_counter < 99.0)
-      _counter++;
+  late AppDatabase database;
+  late TodoDAO _dao;
+  List<ToDoItem> items = [];
+  bool isLoading = true;
+
+  Future<void> _initDatabase() async {
+    try {
+      database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      _dao = database.todoDao;
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Database initialization error: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+    _loadItems();
+  }
+
+  Future<void> _loadItems() async {
+    try {
+      final loadedItems = await database.todoDao.findAllItems();
+
+      setState(() {
+        items = loadedItems;
+      });
+    } catch (e) {
+      print('Error loading items: $e');
+    }
+  }
+
+  Future<void> _addItems(String name, String quantity) async {
+    try {
+      final newID = DateTime.now().millisecondsSinceEpoch;
+      final newItem = ToDoItem(newID, name, quantity);
+
+      await database.todoDao.add(newItem);
+      await _loadItems();
+    } catch (e) {
+      print('Error adding item: $e');
+    }
+  }
+
+  Future<void> _deleteItems(int id) async {
+    try {
+      await database.todoDao.delete(id);
+      await _loadItems();
+    } catch (e) {
+      print('Error deleting item: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerItem = TextEditingController();
+    _controllerQuantity = TextEditingController();
+    Future.delayed(Duration.zero, () async {
+      await _initDatabase();
     });
   }
 
-  void setNewValue(double value){
-    setState(() {
-      _counter = value;
-      myFontSize = value;
-    });
+  @override
+  void dispose() {
+    _controllerItem.dispose();
+    _controllerQuantity.dispose();
+    super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('You have pushed the button this many times:', style: TextStyle(fontSize: myFontSize)),
-
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium!
-              .copyWith(fontSize: myFontSize)),
-            Slider(value: _counter, max: 100.0, onChanged: setNewValue, min: 0.0)
+              "Please enter the fields below",
+              style: TextStyle(fontSize: 20),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _controllerItem,
+                    decoration: InputDecoration(
+                      hintText: "Type the item here",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: _controllerQuantity,
+                    decoration: InputDecoration(
+                      hintText: "Type the quantity here",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_controllerItem.text.isNotEmpty &&
+                        _controllerQuantity.text.isNotEmpty) {
+                      showDialog<String>(
+                        context: context,
+                        builder:
+                            (BuildContext context) => AlertDialog(
+                              title: const Text("Add Items?"),
+                              content: const Text(
+                                "Do you want to add any items items from the list?",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    _controllerItem.clear();
+                                    _controllerQuantity.clear();
+                                  },
+                                  child: const Text('NO'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    await _addItems(
+                                      _controllerItem.text,
+                                      _controllerQuantity.text,
+                                    );
+
+                                    _controllerItem.clear();
+                                    _controllerQuantity.clear();
+                                  },
+                                  child: const Text("YES"),
+                                  //TODO: Selecting "No" from the AlertDialog does not remove the item from the list.
+                                ),
+                              ],
+                            ),
+                      );
+                    }
+                  },
+                  child: const Text("Click Me"),
+                ),
+              ],
+            ),
+            Expanded(child: listPage()),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    ); // This trailing comma makes auto-formatting nicer for build methods.
+  }
+
+  Widget listPage() {
+    return Column(
+      children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, rowNum) {
+                final item = items[rowNum];
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text("Details about Item"),
+                            content: Text(
+                              "Item: {$items.name}\nQuantity: ${item.quantity}",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  onLongPress: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text("Delete Item"),
+                            content: Text(
+                              "Would you like to delete then item you selected?",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  await _deleteItems(item.id);
+                                },
+                                child: const Text('YES'),
+                              ),
+
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("NO"),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${rowNum + 1}: "),
+                      Expanded(
+                        child: Text("${item.name} (Qty: ${item.quantity})"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }
