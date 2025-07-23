@@ -50,13 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
       _dao = database.todoDao;
-      // await _dao.add(
-      //   ToDoItem(0, 'Apple', '10'),
-      // );
-      // await _dao.add(
-      //   ToDoItem(1, 'Orange', '20'),
-      // );
-      // await _loadItems();
+
       setState(() {
         isLoading = false;
       });
