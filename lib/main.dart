@@ -36,6 +36,65 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  ToDoItem? selectedItem;
+  Widget reactiveLayout() {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+
+    if ((width > height) && (width > 720)) {
+      return Row(
+        children: [
+          Expanded(flex: 1, child: listPage()),
+          Expanded(flex: 2, child: detailsPage()),
+        ],
+      );
+    } else {
+          return selectedItem == null ? listPage() : detailsPage();
+    }
+  }
+
+  Widget detailsPage() {
+    if (selectedItem == null) return Center(child: Text("No item selected"));
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Item: ${selectedItem!.name}", style: TextStyle(fontSize: 18)),
+          Text("Quantity: ${selectedItem!.quantity}", style: TextStyle(fontSize: 18)),
+          Text("ID: ${selectedItem!.id}", style: TextStyle(fontSize: 18)),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  await _deleteItems(selectedItem!.id);
+                  setState(() {
+                    selectedItem = null;
+                  });
+                },
+                child: Text("Delete"),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedItem = null;
+                  });
+                },
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+
   String? enterItem;
   String? enterQuantity;
   TextEditingController _controllerItem = TextEditingController();
@@ -113,8 +172,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -213,46 +274,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 final item = items[rowNum];
                 return GestureDetector(
                   onTap: () {
+                    setState(() {
+                      selectedItem = item;
+                    });
                     showDialog(
                       context: context,
                       builder:
                           (context) => AlertDialog(
                             title: Text("Details about Item"),
                             content: Text(
-                              "Item: {$items.name}\nQuantity: ${item.quantity}",
+                              "Item: {$item.name}\nQuantity: ${item.quantity}\nID: {$item.id}",
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
                                 child: Text("OK"),
-                              ),
-                            ],
-                          ),
-                    );
-                  },
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: Text("Delete Item"),
-                            content: Text(
-                              "Would you like to delete then item you selected?",
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  await _deleteItems(item.id);
-                                },
-                                child: const Text('YES'),
-                              ),
-
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("NO"),
                               ),
                             ],
                           ),
