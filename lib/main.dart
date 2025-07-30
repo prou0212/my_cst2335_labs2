@@ -43,15 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
     var height = size.height;
     var width = size.width;
 
+    print("Screen size: ${width}x${height}, selectedItem: ${selectedItem?.name}");
+
     if ((width > height) && (width > 720)) {
       return Row(
         children: [
           Expanded(flex: 1, child: listPage()),
+          VerticalDivider(width: 1),
           Expanded(flex: 2, child: detailsPage()),
         ],
       );
     } else {
-          return selectedItem == null ? listPage() : detailsPage();
+      print("Using phone layout");
+      if (selectedItem == null) {
+        return listPage();
+      } else {
+        return detailsPage();
+      }
     }
   }
 
@@ -181,133 +189,74 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Please enter the fields below",
-              style: TextStyle(fontSize: 20),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: _controllerItem,
-                    decoration: InputDecoration(
-                      hintText: "Type the item here",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: _controllerQuantity,
-                    decoration: InputDecoration(
-                      hintText: "Type the quantity here",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
+       body: reactiveLayout(),
 
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_controllerItem.text.isNotEmpty &&
-                        _controllerQuantity.text.isNotEmpty) {
-                      showDialog<String>(
-                        context: context,
-                        builder:
-                            (BuildContext context) => AlertDialog(
-                              title: const Text("Add Items?"),
-                              content: const Text(
-                                "Do you want to add any items items from the list?",
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                    _controllerItem.clear();
-                                    _controllerQuantity.clear();
-                                  },
-                                  child: const Text('NO'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                    await _addItems(
-                                      _controllerItem.text,
-                                      _controllerQuantity.text,
-                                    );
-
-                                    _controllerItem.clear();
-                                    _controllerQuantity.clear();
-                                  },
-                                  child: const Text("YES"),
-                                  //TODO: Selecting "No" from the AlertDialog does not remove the item from the list.
-                                ),
-                              ],
-                            ),
-                      );
-                    }
-                  },
-                  child: const Text("Click Me"),
-                ),
-              ],
-            ),
-            Expanded(child: listPage()),
-          ],
-        ),
-      ),
     ); // This trailing comma makes auto-formatting nicer for build methods.
   }
 
   Widget listPage() {
     return Column(
       children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, rowNum) {
-                final item = items[rowNum];
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedItem = item;
-                    });
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: Text("Details about Item"),
-                            content: Text(
-                              "Item: {$item.name}\nQuantity: ${item.quantity}\nID: {$item.id}",
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("OK"),
-                              ),
-                            ],
-                          ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("${rowNum + 1}: "),
-                      Expanded(
-                        child: Text("${item.name} (Qty: ${item.quantity})"),
-                      ),
-                    ],
-                  ),
-                );
-              },
+        Text("Please enter the fields below", style: TextStyle(fontSize: 20)),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controllerItem,
+                decoration: InputDecoration(
+                    hintText: "Type the item here"),
+              ),
             ),
+            SizedBox(width: 8),
+            Expanded(
+              child: TextField(
+                controller: _controllerQuantity,
+                decoration: InputDecoration(hintText: "Type the quantity here"),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (_controllerItem.text.isNotEmpty &&
+                    _controllerQuantity.text.isNotEmpty) {
+                  await _addItems(
+                    _controllerItem.text,
+                    _controllerQuantity.text,
+                  );
+                  _controllerItem.clear();
+                  _controllerQuantity.clear();
+                }
+              },
+              child: Text("Add Item"),
+            ),
+          ],
+        ),
+        Text("Tap an item to view details:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Expanded(
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, rowNum) {
+              final item = items[rowNum];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedItem = item;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${rowNum + 1}: "),
+                    Expanded(
+                      child: Text("${item.name} (Qty: ${item.quantity})"),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
+        ),
       ],
     );
   }
 }
+
